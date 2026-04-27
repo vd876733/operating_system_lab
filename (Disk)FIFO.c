@@ -1,25 +1,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
-    int n, head, total_move = 0;
-    printf("Enter no of requests: ");
+int main(){
+    int n, head, total = 0;
+
+    printf("Enter number of requests: ");
     scanf("%d", &n);
+
     int req[n];
-    printf("Enter request list: ");
-    for(int i = 0; i < n; i++) scanf("%d", &req[i]);
+
+    printf("Enter request queue:\n");
+    for(int i = 0; i < n; i++)
+        scanf("%d", &req[i]);
+
     printf("Enter initial head: ");
     scanf("%d", &head);
 
-    printf("\n%-15s | %-10s\n", "Current Head", "Movement");
-    printf("%-15d | --\n", head);
+    printf("\nCurrent Head\tMovement\n");
+    printf("%d\t\t--\n", head);
 
-    for(int i = 0; i < n; i++) {
-        int move = abs(req[i] - head);
-        total_move += move;
-        printf("%-15d | %-10d\n", req[i], move);
+    for(int i = 0; i < n; i++){
+        int move = abs(head - req[i]);
+
+        printf("%d\t\t%d\n", req[i], move);
+
+        total += move;
         head = req[i];
     }
-    printf("\nTotal movement: %d\n", total_move);
+
+    printf("Total Movement: %d\n", total);
     return 0;
 }
