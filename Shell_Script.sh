@@ -1,117 +1,129 @@
 clear
-while [ 1 ]
+while true
 do 
 	echo -e "\n1. New File  2. Display  3. Insert  4. Search  5. Modify  6. Delete  7. Exit"
 	echo -n "Enter your option: "
 	read ch
 
 	case $ch in
+
 	1)
 		echo -n "Enter File name: "
 		read fname
-		if [ -e $fname ];then
+		if [ -e "$fname" ]; then
 			echo "File Already Exists"
 		else
-			touch $fname
-			echo "File Created Successfull"
+			touch "$fname"
+			echo "File Created Successfully"
 		fi
 		;;
+
 	2)
 		echo -n "Enter file name: "
 		read fname
-		if [ -e $fname ]; then
+		if [ -e "$fname" ]; then
 			echo "The content of File: "
-			sort -n $fname
+			sort -n "$fname"
 		else 
 			echo "File Not Exists"
 		fi
 		;;
+
 	3)
 		echo -n "Enter File name: "
 		read fname
-		if [ -e $fname ];then
+		if [ -e "$fname" ]; then
 			echo -n "Enter the Roll Number: "
 			read Roll
-			grep -w "$Roll" $fname > /dev/null
-			ans=$?
-			if [ $ans -eq 0 ]; then
+
+			if grep -w "$Roll" "$fname" > /dev/null
+			then
 				echo "Record Already Present"
 			else 
-				echo -n "Enter name : "
+				echo -n "Enter Name: "
 				read name
-				echo $Roll $name >> $fname
+				echo "$Roll $name" >> "$fname"
 				echo "Record Inserted Successfully"
 			fi
 		else 
 			echo "File not Exists"
 		fi
 		;;
+
 	4)
 		echo -n "Enter File name: "
 		read fname
-		if [ -e $fname ];then
+		if [ -e "$fname" ]; then
 			echo -n "Enter the Roll number to search: "
 			read Roll
-			grep -w "$Roll" $fname
-			ans=$?
-			if [ $ans -ne 0 ];then
-				echo "Record not Found"
+
+			if grep -w "$Roll" "$fname" > /dev/null
+			then
+				echo "Record Found:"
+				grep -w "$Roll" "$fname"
+			else
+				echo "Record not found"
 			fi	
 		else
-			echo "File don't Exists"
+			echo "File doesn't Exist"
 		fi
 		;;
+
 	5)
 		echo -n "Enter the File name: " 
 		read fname
-		if [ -e $fname ]; then
+		if [ -e "$fname" ]; then
 			echo -n "Enter the roll number: "
 			read Roll
-			grep -w "$Roll" $fname > /dev/null
-			ans=$?
-			if [ $ans -eq 0 ]; then
+
+			if grep -w "$Roll" "$fname" > /dev/null
+			then
 				echo -n "Enter new Roll number and Name: "
 				read nroll nname
-				grep -w "$nroll" $fname > /dev/null
-				ans2=$?
-				if [ $ans2 -eq 0 ]; then
-					echo "Record Already present, Please try another roll number"
+
+				if grep -w "$nroll" "$fname" > /dev/null
+				then
+					echo "Record Already present, try another roll number"
 				else
-					grep -v "$Roll" $fname > temp
+					grep -vw "$Roll" "$fname" > temp
 					echo "$nroll $nname" >> temp
-					mv temp $fname
+					mv temp "$fname"
 					echo "Record Modified successfully"
 				fi
 			else 
 				echo "Record not Present"
 			fi
 		else 
-			echo "File doesn't Exists"
+			echo "File doesn't Exist"
 		fi
-		;;							
+		;;
+
 	6)
 		echo -n "Enter the File name: "
 		read fname
-		if [ -e $fname ]; then
+		if [ -e "$fname" ]; then
 			echo -n "Enter the Roll number: "
 			read Roll
-			grep -w "$Roll" $fname > /dev/null
-			ans=$?
-			if [ $ans -eq 0 ]; then
-				grep -v "$Roll" $fname > temp
-				mv temp $fname
+
+			if grep -w "$Roll" "$fname" > /dev/null
+			then
+				grep -vw "$Roll" "$fname" > temp
+				mv temp "$fname"
 				echo "Record Deleted Successfully"
 			else 
-				echo "Record Doesn't Exists"
+				echo "Record Doesn't Exist"
 			fi
 		else 
-			echo "File Don't Exists"
+			echo "File Doesn't Exist"
 		fi
 		;;
+
 	7)
-			exit
-			;;	
+		exit
+		;;
+
 	*)
-			echo "Wrong Input"
+		echo "Wrong Input"
+		;;
 	esac
 done
