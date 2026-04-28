@@ -20,15 +20,18 @@ int main(){
     scanf("%d", &size);
 
     // sort
-    for(int i=0;i<n;i++)
+    for(int i=0;i<n-1;i++)
         for(int j=i+1;j<n;j++)
             if(req[i]>req[j]){
                 int t=req[i]; req[i]=req[j]; req[j]=t;
             }
 
-    int index;
+    int index = n;
     for(int i=0;i<n;i++)
-        if(head < req[i]) { index = i; break; }
+        if(head < req[i]) {
+            index = i;
+            break; 
+        }
 
     printf("\nCurrent Head\tMovement\n");
     printf("%d\t\t--\n", head);
@@ -45,11 +48,11 @@ int main(){
     int move = abs(head - (size-1));
     printf("%d\t\t%d\n", size-1, move);
     total += move;
+    head = size -1 ;
 
     // jump to start
-    move = size-1;
-    printf("0\t\t%d\n", move);
-    total += move;
+    
+    printf("0\t\t--\n");
     head = 0;
 
     // continue
