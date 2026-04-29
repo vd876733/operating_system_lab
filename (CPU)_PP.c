@@ -6,8 +6,8 @@ typedef struct {
     int arrival;
     int burst;
     int priority;
-    int remaining;     // Remaining Time
-    int end_time;      // Completion Time
+    int remaining;
+    int end_time;
     int waiting;
     int turnaround;
 } Process;
@@ -43,13 +43,21 @@ int main() {
     while (completed < n) {
 
         int idx = -1;
-        int highest_priority = INT_MAX;  // Lower value = higher priority
+        int best_priority = INT_MAX;
 
-        // 🔍 Find highest priority process among arrived
+        // 🔍 Selection using 2 IFs
         for (int i = 0; i < n; i++) {
             if (p[i].arrival <= current_time && p[i].remaining > 0) {
-                if (p[i].priority < highest_priority) {
-                    highest_priority = p[i].priority;
+
+                // 1️⃣ Higher priority (smaller value)
+                if (idx == -1 || p[i].priority < best_priority) {
+                    best_priority = p[i].priority;
+                    idx = i;
+                }
+
+                // 2️⃣ Tie-breaker: earlier arrival
+                else if (p[i].priority == best_priority &&
+                         p[i].arrival < p[idx].arrival) {
                     idx = i;
                 }
             }
@@ -61,16 +69,15 @@ int main() {
             continue;
         }
 
-        // ▶️ Execute for 1 unit time
+        // ▶️ Execute for 1 unit (preemptive)
         p[idx].remaining--;
         current_time++;
 
-        // 🔹 If process completes
+        // 🔹 Completion
         if (p[idx].remaining == 0) {
             completed++;
 
             p[idx].end_time = current_time;
-
             p[idx].turnaround = p[idx].end_time - p[idx].arrival;
             p[idx].waiting = p[idx].turnaround - p[idx].burst;
 
