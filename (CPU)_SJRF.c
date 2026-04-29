@@ -5,8 +5,8 @@ typedef struct {
     int pid;
     int arrival;
     int burst;
-    int remaining;     // Remaining Time
-    int end_time;      // Completion Time
+    int remaining;
+    int end_time;
     int waiting;
     int turnaround;
 } Process;
@@ -41,11 +41,19 @@ int main() {
         int idx = -1;
         int min_remain = INT_MAX;
 
-        // 🔍 Find process with smallest remaining time
+        // 🔍 Selection using 2 IFs
         for (int i = 0; i < n; i++) {
             if (p[i].arrival <= current_time && p[i].remaining > 0) {
-                if (p[i].remaining < min_remain) {
+
+                // 1️⃣ Smaller remaining time
+                if (idx == -1 || p[i].remaining < min_remain) {
                     min_remain = p[i].remaining;
+                    idx = i;
+                }
+
+                // 2️⃣ Tie-breaker: earlier arrival
+                else if (p[i].remaining == min_remain &&
+                         p[i].arrival < p[idx].arrival) {
                     idx = i;
                 }
             }
@@ -57,16 +65,15 @@ int main() {
             continue;
         }
 
-        // ▶️ Execute for 1 unit time
+        // ▶️ Execute for 1 unit
         p[idx].remaining--;
         current_time++;
 
-        // 🔹 If process completes
+        // 🔹 Completion
         if (p[idx].remaining == 0) {
             completed++;
 
             p[idx].end_time = current_time;
-
             p[idx].turnaround = p[idx].end_time - p[idx].arrival;
             p[idx].waiting = p[idx].turnaround - p[idx].burst;
 
